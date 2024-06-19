@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Data Input</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .header h1,
+        .header h3 {
+            margin: 0;
+        }
+
+       
+        .info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap; /* Wrap items if they exceed container width */
+            gap: 10px; /* Adjust the gap between items */
+            margin-bottom: 20px;
+        }
+        
+        .info-line {
+            
+            align-items: center;
+            margin-bottom: 10px; /* Adjust vertical spacing between lines */
+            flex: 0 0 calc(33.33% - 10px); /* Adjust width for three labels per line */
+        }
+        
+        .info-line label {
+            margin-right: 5px;
+            flex: 0 0 auto;
+            font-size: 14px;
+            white-space: nowrap; /* Prevent label from wrapping */
+            overflow: hidden; /* Hide overflow text */
+            text-overflow: ellipsis; /* Show ellipsis (...) for overflow */
+        }
+        
+        .info-line input[type="text"],
+        .info-line input[type="number"],
+        .info-line select {
+            width: 100%; /* Adjust the width as needed */
+            font-size: 12px; /* Adjust font size for input fields */
+            box-sizing: border-box; /* Include padding and border in the element's total width and height */
+        }
+        
+
+        table {
+            width: 120%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            margin-right: 10px;
+        }
+
+        .table-container {
+            margin-right: 20px; /* Adjust the space as per your design needs */
+            overflow-x: auto; /* Add horizontal scroll if table overflows container */
+        }
+        
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+        }
+
+        .button {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .button button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .button button:hover {
+            background-color: #3e8e41;
+        }
+
+        .delete-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form action="/add_product" method="POST">
+            <div class="header">
+                <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" width="100">
+                <h2><label for="cname">PROJECT NAME:</label>
+                    <input type="text" id="cname" name="cname" value="{{ cname }}"></h2>
+                <h3>      </h3>
+            </div>
+            <div class="info">
+                <div class="info-line">
+                    <label for="loc">LOCATION:</label>
+                    <input type="text" id="loc" name="loc" value="{{ loc }}">
+                </div>
+                <div class="info-line">
+                    <label for="po">PO. NUMBER:</label>
+                    <input type="text" id="po" name="po" value="{{ po }}">
+                </div>
+            </div>
+            <div class="info">
+                <div class="info-line">
+                    <label for="noAndDate">IOF No.:</label>
+                    <input type="text" id="noAndDate" name="noAndDate" value="{{ no_and_date }}">
+                </div>
+                <div class="info-line">
+                    <label for="iofdate"> DATE:</label><br>
+                    <input type="date" id="iofdate" name="iofdate" value="{{ iofdate }}">
+                </div>
+            </div>
+            <div class="info">
+                <div class="info-line">
+                    <label for="rev">REV 1 IOF No.:</label>
+                    <input type="text" id="rev" name="rev" value="{{ rev }}">
+                </div>
+                <div class="info-line">
+                    <label for="revdate">DATE:</label><br>
+                    <input type="date" id="revdate" name="revdate" value="{{ revdate }}">
+                </div>
+            </div>
+            <div class="info">
+                <div class="info-line">
+                    <label for="iof1">REV 2 IOF No.:</label>
+                    <input type="text" id="iof1" name="iof1" value="{{ iof1 }}">
+                </div>
+                <div class="info-line">
+                    <label for="iof2">DATE:</label><br>
+                    <input type="date" id="iof2" name="iof2" value="{{ iof2 }}">
+                </div>
+            </div>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>SL. No. </th>
+                            <th>PART NO./DESCRIPTION</th>
+                            <th>CATEGORY</th>
+                            <th>MAKE</th>
+                            <th>QTY</th>
+                            <th>TDS APPROVAL</th>
+                            <th>BILLABLE/NON BILLABLE</th>
+                            <th>ORDERED QTY</th>
+                            <th>ORDER STATUS</th>
+                            <th>PODATE</th>
+                            <th>DELIVERY PERIOD</th>
+                            <th>DELIVERY AT</th>
+                            <th>SUPPLIED QTY</th>
+                            <th>DELIVERY STATUS</th>
+                            <th>BACKLOG QTY</th>
+                            <th>REMARKS</th>
+                            <th>ACTION</th> <!-- New column for delete button -->
+                        </tr>
+                    </thead>
+                    <tbody id="productTableBody">
+                        {% for product in products %}
+                        {% if product.part_no %}
+                        <tr>
+                            <td>{{ loop.index }}</td>  <!-- SL. No. -->
+                            <td><input type="text" name="partNo[]" value="{{ product.part_no }}"></td>
+                            <td><input type="text" name="category[]" value="{{ product.category }}"></td>
+                            <td><input type="text" name="make[]" value="{{ product.make }}"></td>
+                            <td><input type="number" name="qty[]" value="{{ product.qty }}"></td>
+                            <td>
+                                <select name="approvedNotapproved[]">
+                                    <option value="approved" {% if product.approved_not_approved == 'approved' %}selected{% endif %}>Approved</option>
+                                    <option value="not approved" {% if product.approved_not_approved == 'not approved' %}selected{% endif %}>Not Approved</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select name="billableNonBillable[]">
+                                    <option value="billable" {% if product.billable_non_billable == 'billable' %}selected{% endif %}>Billable</option>
+                                    <option value="nonBillable" {% if product.billable_non_billable == 'nonBillable' %}selected{% endif %}>Non Billable</option>
+                                </select>
+                            </td>
+                            <td><input type="number" name="orderedQty[]" value="{{ product.ordered_qty }}"></td>
+                            <td>
+                                <select name="orderStatus[]">
+                                    <option value="confirmed" {% if product.order_status == 'confirmed' %}selected{% endif %}>Confirmed</option>
+                                    <option value="pending" {% if product.order_status == 'pending' %}selected{% endif %}>Pending</option>
+                                    <option value="cancelled" {% if product.order_status == 'cancelled' %}selected{% endif %}>Cancelled</option>
+                                </select>
+                            </td>
+                            <td><input type="text" name="podate[]" value="{{ product.podate }}"></td>
+                            <td><input type="text" name="deliveryPeriod[]" value="{{ product.delivery_period }}"></td>
+                            <td><input type="text" name="deliveryAt[]" value="{{ product.delivery_at }}"></td>
+                            <td><input type="number" name="suppliedQty[]" value="{{ product.supplied_qty }}"></td>
+                            <td>
+                                <select name="deliveryStatus[]">
+                                    <option value="pending" {% if product.delivery_status == 'pending' %}selected{% endif %}>Pending</option>
+                                    <option value="completed" {% if product.delivery_status == 'completed' %}selected{% endif %}>Completed</option>
+                                    <option value="delayed" {% if product.delivery_status == 'delayed' %}selected{% endif %}>Delayed</option>
+                                </select>
+                            </td>
+                            <td><input type="text" name="backlogQty[]" value="{{ product.backlog_qty }}"></td>
+                            <td><input type="text" name="remarks[]" value="{{ product.remarks }}"></td>
+                            <td>
+                                <button type="button" class="delete-btn" onclick="deleteRow(this)">Delete</button>
+                            </td>
+                        </tr>
+                       
+                        {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+                <div class="button">
+                    <button type="button" id="addRowBtn">Add Row</button>
+                </div>
+            </div>
+            <div class="button">
+                <button type="submit">Submit</button>
+            </div>
+            <br><br>
+        </form>
+    </div>
+    <script>
+        // Function to handle row deletion
+        function deleteRow(button) {
+            // Traverse up the DOM to find the closest <tr> element
+            var row = button.closest('tr');
+            row.remove();
+        }
+
+        // Select the form and table body
+        const form = document.querySelector('form');
+        const tableBody = document.getElementById('productTableBody');
+
+        // Function to create a table row
+        function createTableRow() {
+            const row = document.createElement('tr');
+            const rowCount = tableBody.rows.length + 1;
+
+            // SL. No.
+            const slNoCell = document.createElement('td');
+            slNoCell.textContent = rowCount;
+            row.appendChild(slNoCell);
+
+            // PART NO. / DESCRIPTION
+            const partNoCell = document.createElement('td');
+            partNoCell.innerHTML = '<input type="text" name="partNo[]" >';
+            row.appendChild(partNoCell);
+
+            // CATEGORY
+            const categoryCell = document.createElement('td');
+            categoryCell.innerHTML = '<input type="text" name="category[]" >';
+            row.appendChild(categoryCell);
+
+            // MAKE
+            const makeCell = document.createElement('td');
+            makeCell.innerHTML = '<input type="text" name="make[]" >';
+            row.appendChild(makeCell);
+
+            // QTY (Ordered Qty)
+            const qtyCell = document.createElement('td');
+            qtyCell.innerHTML = '<input type="number" name="qty[]" min="0" >';
+            row.appendChild(qtyCell);
+
+            // TDS APPROVAL
+            const tdsCell = document.createElement('td');
+            const tdsSelect = document.createElement('select');
+            tdsSelect.name = "approvedNotapproved[]";
+            tdsSelect.required = true;
+            tdsSelect.innerHTML = `
+                <option value="approved">Approved</option>
+                <option value="not approved">Not Approved</option>
+            `;
+            tdsCell.appendChild(tdsSelect);
+            row.appendChild(tdsCell);
+
+            // Billable/Non Billable
+            const billableCell = document.createElement('td');
+            const billableSelect = document.createElement('select');
+            billableSelect.name = "billableNonBillable[]";
+            billableSelect.required = true;
+            billableSelect.innerHTML = `
+                <option value="billable">Billable</option>
+                <option value="nonBillable">Non Billable</option>
+            `;
+            billableCell.appendChild(billableSelect);
+            row.appendChild(billableCell);
+
+            // Ordered Qty
+            const orderedQtyCell = document.createElement('td');
+            orderedQtyCell.innerHTML = '<input type="number" name="orderedQty[]" min="0" >';
+            row.appendChild(orderedQtyCell);
+
+            // Order Status
+            const orderStatusCell = document.createElement('td');
+            const orderStatusSelect = document.createElement('select');
+            orderStatusSelect.name = "orderStatus[]";
+            orderStatusSelect.required = true;
+            orderStatusSelect.innerHTML = `
+                <option value="confirmed">Confirmed</option>
+                <option value="pending">Pending</option>
+                <option value="cancelled">Cancelled</option>
+            `;
+            orderStatusCell.appendChild(orderStatusSelect);
+            row.appendChild(orderStatusCell);
+
+            // PODATE
+            const podateCell = document.createElement('td');
+            podateCell.innerHTML = '<input type="text" name="podate[]" >';
+            row.appendChild(podateCell);
+
+            // DELIVERY PERIOD
+            const deliveryPeriodCell = document.createElement('td');
+            deliveryPeriodCell.innerHTML = '<input type="text" name="deliveryPeriod[]" >';
+            row.appendChild(deliveryPeriodCell);
+
+            // DELIVERY AT
+            const deliveryAtCell = document.createElement('td');
+            deliveryAtCell.innerHTML = '<input type="text" name="deliveryAt[]" >';
+            row.appendChild(deliveryAtCell);
+
+            // SUPPLIED QTY
+            const suppliedQtyCell = document.createElement('td');
+            suppliedQtyCell.innerHTML = '<input type="number" name="suppliedQty[]" min="0" >';
+            row.appendChild(suppliedQtyCell);
+
+            // DELIVERY STATUS
+            const deliveryStatusCell = document.createElement('td');
+            const deliveryStatusSelect = document.createElement('select');
+            deliveryStatusSelect.name = "deliveryStatus[]";
+            deliveryStatusSelect.required = true;
+            deliveryStatusSelect.innerHTML = `
+                <option value="pending">Pending</option>
+                <option value="completed">Completed</option>
+                <option value="delayed">Delayed</option>
+            `;
+            deliveryStatusCell.appendChild(deliveryStatusSelect);
+            row.appendChild(deliveryStatusCell);
+
+            // BACKLOG QTY
+            const backlogQtyCell = document.createElement('td');
+            backlogQtyCell.innerHTML = '<input type="text" name="backlogQty[]" >';
+            row.appendChild(backlogQtyCell);
+
+            // REMARKS
+            const remarksCell = document.createElement('td');
+            remarksCell.innerHTML = '<input type="text" name="remarks[]" >';
+            row.appendChild(remarksCell);
+
+            // ACTION (Delete button)
+            const actionCell = document.createElement('td');
+            const deleteBtn = document.createElement('button');
+            deleteBtn.type = "button";
+            deleteBtn.className = "delete-btn";
+            deleteBtn.textContent = "Delete";
+            deleteBtn.onclick = function() {
+                deleteRow(deleteBtn);
+            };
+            actionCell.appendChild(deleteBtn);
+            row.appendChild(actionCell);
+
+            // Append the row to the table body
+            tableBody.appendChild(row);
+        }
+
+        // Event listener for form submission
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from submitting
+            form.submit(); // Submit the form
+        });
+
+        function deleteRow(btn) {
+            var row = btn.parentNode.parentNode;
+            row.parentNode.removeChild(row);
+        }
+
+        // Select the addRowBtn button by its ID
+        const addRowBtn = document.getElementById('addRowBtn');
+
+        // Add event listener for click event
+        addRowBtn.addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent button default behavior (e.g., form submission)
+            createTableRow(); // Call function to create a new table row
+        });
+    </script>
+</body>
+</html>

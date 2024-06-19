@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PROJECT MATERIAL TRACKER</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            margin-top: 10px;
+        }
+        .header h1,
+        .header h3 {
+            margin: 0;
+        }
+        h1 {
+            text-align: center;
+        }
+        .footer {
+            padding: 20px;
+            border-top: 1px solid #dee2e6;
+            text-align: center;
+        }
+        .footer p {
+            margin: 10px 0;
+        }
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .footer .contact-info {
+            font-size: 12px;
+            text-align: right;
+        }
+        .footer .contact-info p {
+            margin: 5px 0;
+        }
+        .footer .left img {
+            display: block;
+            margin-right: auto;
+        }
+        .footer .right {
+            flex: 1;
+            text-align: right;
+        }
+        .footer .regards {
+            font-size: 12px; /* Adjust font size as needed */
+            text-align: left; /* Align text to the left */
+            margin-left: 12px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 2px solid;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+            border: 2px solid;
+        }
+        .summary-table {
+            margin-top: 20px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        .summary-table.approval {
+            border: 2px solid green;
+        }
+        .summary-table.order {
+            border: 2px solid blue;
+        }
+        .summary-table.delivery {
+            border: 2px solid orange;
+        }
+        .summary-table.approval .section-title th {
+            background-color: #28a745; /* Green color */
+           
+            border: 2px solid ;
+        }
+    
+        .summary-table.order .section-title th {
+            background-color: #007bff; /* Blue color */
+           
+            border: 2px solid ;
+        }
+    
+        .summary-table.delivery .section-title th {
+            background-color: #FFA700; /* Orange color */
+           
+            border: 2px solid ;
+        }
+        .progress {
+            height: 20px;
+            margin-bottom: 20px;
+        }
+        .section-title {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        .status-not-approved {
+            background-color: red;
+        }
+        .status-pending {
+            background-color: yellow;
+        }
+        .status-done {
+            background-color: green;
+        }
+        .status-delayed {
+            background-color: red;
+
+        }
+        .status-completed {
+            background-color: green;
+
+        }
+        .status-other {
+            background-color: darkred;
+ 
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        
+
+        .right-align {
+            text-align: right;
+        }
+        
+        .right-align p {
+            margin: 5px 0;
+        }
+        
+        .right-align strong {
+            font-weight: bold;
+        }
+        .watermark {
+            position: fixed;
+            
+            width: 100%;
+            height: 100%;
+            background-image: url('{{ url_for("static", filename="logo.png") }}'); /* URL path to your logo image */
+            background-position: center ;
+            background-repeat: no-repeat; /* Adjust based on how you want the watermark to repeat */
+            opacity: 0.3; /* Adjust the opacity as needed */
+            pointer-events: none; /* Ensure clicks and mouse events do not interact with the watermark */
+            z-index: -1; /* Place the watermark behind all other content */
+        }
+        
+        
+    </style>
+</head>
+<body>
+    <div class="watermark"></div>
+    <div class="container">
+        <div class="header">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" width="100">
+            <br><br>
+            <h2>PROJECT MATERIAL TRACKER</h2>
+            <h2>    </h2>
+            <h3></h3>
+            <br>
+            <br>
+        </div>
+    
+        <div class="right-align">
+            <p><strong>Location:</strong> {{loc}}</p>
+            <p><strong>Customer PO No.:</strong> {{po}}</p>
+            <p><strong>Customer Name:</strong> {{cname}}</p>
+            
+        </div>
+    <br>
+        
+
+        <!-- Approval Table -->
+        <table class="summary-table approval">
+            <tr class="section-title">
+                <th colspan="3">APPROVAL STATUS</th>
+            </tr>
+            <tr>
+                <th>Approved TDS</th>
+                <td id="approvedTDS">{{ approved_tds }}</td>
+                <td id="approvedTDSPercent">{{ "{:.2f}".format((approved_tds / total_parts * 100) if total_parts else 0) }}%</td>
+            </tr>
+            <tr>
+                <th>Not Approved TDS</th>
+                <td id="notApprovedTDS">{{ not_approved_tds }}</td>
+                <td id="notApprovedTDSPercent">{{ "{:.2f}".format((not_approved_tds / total_parts * 100) if total_parts else 0) }}%</td>
+            </tr>
+        </table>
+
+        <!-- Order Status Table -->
+        <table class="summary-table order">
+            <tr class="section-title">
+                <th colspan="3">ORDER STATUS</th>
+            </tr>
+            <tr>
+                <th>Pending Orders</th>
+                <td id="pendingOrders">{{ pending_orders }}</td>
+                <td id="pendingOrdersPercent">{{ "{:.2f}".format((pending_orders / total_parts * 100) if total_parts else 0) }}%</td>
+            </tr>
+            <tr>
+                <th>Confirmed Orders</th>
+                <td id="confirmedOrders">{{ confirmed_orders }}</td>
+                <td id="confirmedOrdersPercent">{{ "{:.2f}".format((confirmed_orders / total_parts * 100) if total_parts else 0) }}%</td>
+            </tr>
+            <tr>
+                <th>Cancelled Orders</th>
+                <td id="cancelledOrders">{{ cancelled_orders }}</td>
+                <td id="cancelledOrdersPercent">{{ "{:.2f}".format((cancelled_orders / total_parts * 100) if total_parts else 0) }}%</td>
+            </tr>
+        </table>
+
+        <!-- Delivery Status Table -->
+        <table class="summary-table delivery">
+            <tr class="section-title">
+                <th colspan="3">DELIVERY STATUS</th>
+            </tr>
+            <tr>
+                <th>Pending Deliveries</th>
+                <td id="pendingDeliveries">{{ pending_deliveries }}</td>
+                <td id="pendingDeliveriesPercent">{{ "{:.2f}".format((pending_deliveries / total_parts * 100) if total_parts else 0) }}%</td>
+            </tr>
+            <tr>
+                <th>Completed Deliveries</th>
+                <td id="completedDeliveries">{{ completed_deliveries }}</td>
+                <td id="completedDeliveriesPercent">{{ "{:.2f}".format((completed_deliveries / total_parts * 100) if total_parts else 0) }}%</td>
+            </tr>
+            <tr>
+                <th>Delayed Deliveries</th>
+                <td id="delayedDeliveries">{{ delayed_deliveries }}</td>
+                <td id="delayedDeliveriesPercent">{{ "{:.2f}".format((delayed_deliveries / total_parts * 100) if total_parts else 0) }}%</td>
+            </tr>
+        </table>
+
+        <br><br>
+        <hr>
+        <br><br>
+        <h2>MATERIAL PROCUREMENT PROGRESS</h2>
+        <br><br>
+        
+        <p>APPROVAL PROGRESS</p>
+        <div class="progress">
+            <div id="approvalProgress" class="progress-bar bg-success" role="progressbar" style="width: {{ "{:.2f}".format((approved_tds / total_parts * 100) if total_parts else 0) }}%;" aria-valuenow="{{ "{:.2f}".format((approved_tds / total_parts * 100) if total_parts else 0) }}" aria-valuemin="0" aria-valuemax="100">{{ "{:.2f}".format((approved_tds / total_parts * 100) if total_parts else 0) }}%</div>
+        </div>
+        <br>
+        <p>ORDER PROGRESS</p>
+        <div class="progress">
+            <div id="orderProgress" class="progress-bar bg-info" role="progressbar" style="width: {{ "{:.2f}".format((confirmed_orders / total_parts * 100) if total_parts else 0) }}%;" aria-valuenow="{{ "{:.2f}".format((confirmed_orders / total_parts * 100) if total_parts else 0) }}" aria-valuemin="0" aria-valuemax="100">{{ "{:.2f}".format((confirmed_orders / total_parts * 100) if total_parts else 0) }}%</div>
+        </div>
+        <br>
+        <p>DELIVERY PROGRESS</p>
+        <div class="progress">
+            <div id="deliveryProgress" class="progress-bar bg-warning" role="progressbar" style="width: {{ "{:.2f}".format((completed_deliveries / total_parts * 100) if total_parts else 0) }}%;" aria-valuenow="{{ "{:.2f}".format((completed_deliveries / total_parts * 100) if total_parts else 0) }}" aria-valuemin="0" aria-valuemax="100">{{ "{:.2f}".format((completed_deliveries / total_parts * 100) if total_parts else 0) }}%</div>
+        </div>
+       
+        
+        <br><br><br> <hr><br><br><br><br>
+        <h3>PENDING MATERIAL REMARKS</h3>
+        <br><br>
+        <table class="summary-table">
+            <tr>
+                <th>Product Name</th>
+                <th>Approval Status</th>
+                <th>Order Status</th>
+                <th>Delivery Status</th>
+                <th>Remarks</th>
+            </tr>
+            {% for product in products %}
+                {% if product.remarks %}
+                <tr>
+                    <td>{{ product.part_no }}</td>
+                    <td class="{% if product.approved_not_approved == 'not approved' %}status-not-approved{% elif product.approved_not_approved == 'pending' %}status-pending{% else %}status-done{% endif %}">{{ product.approved_not_approved }}</td>
+                    <td class="{% if product.order_status == 'cancelled' %}status-not-approved{% elif product.order_status == 'pending' %}status-pending{% else %}status-done{% endif %}">{{ product.order_status }}</td>
+                    <td class="{% if product.delivery_status == 'delayed' %}status-delayed{% elif product.delivery_status == 'pending' %}status-pending{% elif product.delivery_status == 'completed' %}status-completed{% else %}status-other{% endif %}">{{ product.delivery_status }}</td>
+                    <td>{{ product.remarks }}</td>
+                </tr>
+                {% endif %}
+            {% endfor %}
+        </table>
+        <br><br>
+
+        <div class="footer">
+            <div class="footer-bottom">
+                <div class="left">
+                    <br><br><br><br>
+                    <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" width="100">
+                </div>
+                <div class="right">
+                    <div class="contact-info">
+                        <h6><u>For any queries Contact:</u> </h6>
+                        <p> Name of the person </p>
+                        <p>Email: info@yourcompany.com</p>
+                        <p>Phone: 1234567890</p>
+                    </div>
+                    <div class="regards">
+                        <p>Regards<br>
+                        Nadiya Team<br>
+                        Nadiya Technology Solutions Pvt Ltd<br>                   
+                        2nd Floor, #372/A,New No 7,50ft Main Road,<br>                        
+                        Banashankari 1st Stage,Bangalore – 560019<br>                        
+                        www.nadiya.in<br></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+        
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>
